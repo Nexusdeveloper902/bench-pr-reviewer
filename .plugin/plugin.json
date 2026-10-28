@@ -1,0 +1,88 @@
+{
+  "name": "bench-pr-reviewer",
+  "version": "0.1.0",
+  "description": "Review Bench pull requests on every push and post severity-ranked findings as a comment-only GitHub review. It never approves, requests changes, or merges.",
+  "author": {
+    "name": "OpenHands",
+    "email": "contact@all-hands.dev"
+  },
+  "homepage": "https://github.com/OpenHands/extensions",
+  "repository": "https://github.com/OpenHands/extensions",
+  "license": "MIT",
+  "keywords": [
+    "github",
+    "pull-request",
+    "review",
+    "code-review",
+    "automation",
+    "integration"
+  ],
+  "automation": {
+    "schema_version": "openhands.automation.plugin.v1",
+    "entrypoint": {
+      "runner": "script",
+      "working_dir": "scripts",
+      "command": "python3 plugin_runner.py worker.py"
+    },
+    "runtime": {
+      "plugins": [],
+      "agent_profile": {
+        "required": true,
+        "default_name": "bench-pr-reviewer",
+        "allowed_tools": [
+          "terminal",
+          "file_editor"
+        ]
+      }
+    },
+    "config_schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "repos": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "default": [
+            "Nexusdeveloper902/Bench"
+          ]
+        },
+        "trigger_label": {
+          "type": "string",
+          "default": "openhands-review"
+        },
+        "review_tone": {
+          "type": "string",
+          "default": "thorough"
+        },
+        "github_token_secret": {
+          "type": "string",
+          "default": "GITHUB_PERSONAL_ACCESS_TOKEN"
+        },
+        "trigger_reviewer": {
+          "type": "string",
+          "default": "all-hands-bot"
+        },
+        "max_new_per_run": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 2
+        },
+        "maintainers": {
+          "type": ["array", "string"],
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        }
+      }
+    },
+    "suggested_trigger": {
+      "type": "cron",
+      "schedule": "*/15 * * * *",
+      "timezone": "UTC"
+    }
+  }
+}
